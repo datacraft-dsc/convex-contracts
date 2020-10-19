@@ -2,11 +2,7 @@
     starfish-provenance contract
 
 """
-from convex_api import (
-    Account as ConvexAccount,
-    ConvexAPI
-)
-
+from convex_api import ConvexAPI
 from convex_contracts.convex_contract import ConvexContract
 
 
@@ -54,5 +50,3 @@ class ProvenanceContract(ConvexContract):
             (export event-list event-owner event-timestamp register version)
 
 '''
-
-

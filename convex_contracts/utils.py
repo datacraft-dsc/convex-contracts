@@ -9,10 +9,11 @@ from typing import (
 )
 
 
-from convex_api import ConvexAPI
 from convex_api import Account as ConvexAccount
+from convex_api import ConvexAPI
 
 ConvexAccountList = List[ConvexAccount]
+
 
 def auto_topup_account(convex: ConvexAPI, account: Union[ConvexAccount, ConvexAccountList], min_balance=None):
     if isinstance(account, (list, tuple)):
@@ -25,6 +26,6 @@ def auto_topup_account(convex: ConvexAPI, account: Union[ConvexAccount, ConvexAc
         min_balance = amount
     balance = convex.get_balance(account)
     while balance < min_balance and retry_counter > 0:
-        request_amount = convex.request_funds(amount, account)
+        convex.request_funds(amount, account)
         balance = convex.get_balance(account)
         retry_counter -= 1

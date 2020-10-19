@@ -2,11 +2,7 @@
     starfish-ddo-registry contract
 
 """
-from convex_api import (
-    Account as ConvexAccount,
-    ConvexAPI
-)
-
+from convex_api import ConvexAPI
 from convex_contracts.convex_contract import ConvexContract
 
 
@@ -75,4 +71,3 @@ class DDORegistryContract(ConvexContract):
             )
             (export resolve resolve? register unregister owner owner? owner-list transfer version)
         '''
-
