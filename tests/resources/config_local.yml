@@ -1,0 +1,13 @@
+# Config settings for delevelopment local block chain network
+
+
+
+network:
+  url: https://convex.world
+
+accounts:
+  account1:
+    address: '0x5288fec4153b702430771dfac8aed0b21cafca4344dae0d47b97f0bf532b3306'
+    password: secret
+    keyfile: tests/resources/account_key_files/local/5288fec4153b702430771dfac8aed0b21cafca4344dae0d47b97f0bf532b3306.pem
+
