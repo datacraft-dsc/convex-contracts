@@ -1,7 +1,7 @@
 # Convex Contracts
 
 ![](https://github.com/DEX-Company/convex-contracts/workflows/testing/badge.svg)
-[![GitHub contributors](https://img.shields.io/github/contributors/DEX-Company/starfish-py.svg)](https://github.com/DEX-Company/convex-contracts/graphs/contributors)
+[![GitHub contributors](https://img.shields.io/github/contributors/DEX-Company/convex-contracts.svg)](https://github.com/DEX-Company/convex-contracts/graphs/contributors)
 
 ---
 
