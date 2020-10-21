@@ -16,4 +16,5 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.PUBLISH_TOKEN }}
         registry: docker.pkg.github.com
-        repository: dex-company/convex-contracts/deploy-dev
+        repository: dex-company/convex-contracts/deploy-testing
+        tag_with_ref: true

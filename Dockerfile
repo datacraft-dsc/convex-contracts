@@ -4,7 +4,7 @@
 # COMMENTS:
 #       This deploys the starfish contracts on the convex development network
 # USAGE:
-#       docker run
+#       docker run docker.pkg.github.com/dex-company/convex-contracts/deploy-testing:latest
 
 FROM alpine:latest
 
