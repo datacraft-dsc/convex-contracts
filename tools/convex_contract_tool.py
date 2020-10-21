@@ -11,6 +11,7 @@ import importlib
 import inspect
 import json
 import logging
+import os
 
 
 from convex_api import Account as ConvexAccount
@@ -21,9 +22,9 @@ from convex_contracts.utils import auto_topup_account
 
 
 CONTRACT_PACKAGE = 'convex_contracts.contracts'
-
 DEFAULT_URL = 'https://convex.world'
 
+logger = logging.getLogger('convex_contract_tool')
 
 def load_contracts(package_name):
     result = {}
@@ -81,24 +82,31 @@ def main():
 
     if args.debug:
         logging.basicConfig(level=logging.DEBUG)
+        logging.getLogger('urllib3').setLevel(logging.INFO)
 
     if args.command == 'deploy':
         if args.keyfile is None or args.password is None:
             print('You need to provide an account keyfile and password to deploy the contracts')
             return
+        logger.debug(f'loading account keyfile {args.keyfile}')
+        if not os.path.exists(args.keyfile):
+            print(f'Cannot find account keyfile {args.keyfile}')
         account = ConvexAccount.import_from_file(args.keyfile, args.password)
+        logger.debug(f'connecting to convex network {args.url}')
         convex = ConvexAPI(args.url)
         if not convex:
             print(f'Cannot connect to the convex network at {args.url}')
             return
 
         if args.auto_topup:
+            logger.debug('auto topup of account balance')
             auto_topup_account(convex, account)
 
         contract_items = load_contracts(CONTRACT_PACKAGE)
         values = {}
         for class_name, contract_class in contract_items.items():
             contract = contract_class(convex)
+            logger.debug(f'deploying contract {class_name} {contract.name}')
             values[contract.name] = contract.deploy(account)
         print(json.dumps(values, sort_keys=True, indent=4))
 
