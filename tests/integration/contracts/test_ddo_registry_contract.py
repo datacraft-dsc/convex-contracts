@@ -23,21 +23,20 @@ ddo_register_contract_address = None
 def contract_address(convex, accounts):
     global ddo_register_contract_address
     contract_account = accounts[0]
-    auto_topup_account(convex, contract_account, 50000000)
+    auto_topup_account(convex, contract_account)
     if ddo_register_contract_address is None:
-        ddo_registry_contract = DDORegistryContract(convex)
-        ddo_register_contract_address = ddo_registry_contract.deploy(contract_account)
+        contract = DDORegistryContract(convex)
+        ddo_register_contract_address = contract.deploy(contract_account)
         auto_topup_account(convex, contract_account)
     return ddo_register_contract_address
 
 
 def test_contract_version(convex, accounts, contract_address):
     contract_account = accounts[0]
-    ddo_registry_contract = DDORegistryContract(convex)
-    version = ddo_registry_contract.get_version(contract_account)
+    contract = DDORegistryContract(convex)
+    version = contract.get_version(contract_account)
     assert(version)
-    assert(version == ddo_registry_contract.version)
-
+    assert(version == contract.version)
 def test_contract_did_register_assert_did(convex, accounts, contract_address):
 
     test_account = accounts[0]
