@@ -26,6 +26,7 @@ DEFAULT_URL = 'https://convex.world'
 
 logger = logging.getLogger('convex_contract_tool')
 
+
 def load_contracts(package_name):
     result = {}
     package_module = importlib.import_module(package_name)
