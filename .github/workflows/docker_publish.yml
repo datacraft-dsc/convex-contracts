@@ -16,4 +16,4 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.PUBLISH_TOKEN }}
         registry: docker.pkg.github.com
-        repository: dex-company/convex-contracts/deploy-contracts-dev
+        repository: dex-company/convex-contracts/deploy-dev
