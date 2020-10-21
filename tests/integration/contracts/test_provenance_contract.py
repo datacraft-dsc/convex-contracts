@@ -44,7 +44,7 @@ def register_test_list(pytestconfig, convex, accounts, contract_address):
         event_count = 10
         auto_topup_account(convex, accounts)
 
-        register_account = accounts[1]
+        register_account = other_account
         for index in range(0, event_count):
             if index % 2 == 0:
                 asset_id = '0x' + secrets.token_hex(32)
@@ -83,16 +83,16 @@ def test_provenance_contract_event_list(convex, accounts, contract_address, regi
     assert(event_item['owner'] == record['owner'])
 
 def test_provenance_contract_event_owner_list(convex, accounts, contract_address, register_test_list):
-    test_account = accounts[0]
+    other_account = accounts[1]
     record = register_test_list[secrets.randbelow(len(register_test_list))]
     owner_count = 0
     for item in register_test_list:
         if item['owner'] == record['owner']:
             owner_count += 1
-    result = convex.query(f'(call {contract_address} (event-owner {record["owner"]}))', test_account)
+    result = convex.query(f'(call {contract_address} (event-owner {record["owner"]}))', other_account)
     event_list = result['value']
     assert(event_list)
-    assert(len(event_list) == owner_count)
+    assert(len(event_list) >= owner_count)
     for event_item in event_list:
         assert(event_item['owner'] == record["owner"])
 
