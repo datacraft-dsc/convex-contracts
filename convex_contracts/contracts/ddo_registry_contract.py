@@ -9,7 +9,7 @@ from convex_contracts.convex_contract import ConvexContract
 class DDORegistryContract(ConvexContract):
 
     def __init__(self, convex: ConvexAPI):
-        ConvexContract.__init__(self, convex, 'starfish-ddo-registry', '0.0.4')
+        ConvexContract.__init__(self, convex, 'starfish-ddo-registry', '0.0.5')
 
         self._source = f'''
             (def registry {{}})
@@ -23,13 +23,14 @@ class DDORegistryContract(ConvexContract):
             )
             (defn delete-register [did] (def registry (dissoc registry did)) )
             (defn assert-owner [did]
-                (when-not (owner? did) (fail "NOT-OWNER" "not owner"))
+                (when-not (owner? did) (fail :NOT-OWNER "not owner"))
             )
             (defn assert-address [value]
-                (when-not (address? (address value)) (fail "INVALID" "invalid address"))
+                (when-not (address? (address value)) (fail :INVALID "invalid address"))
             )
             (defn assert-did [value]
-                (when-not (and (blob? value) (== 32 (count (blob value)))) (fail "INVALID" "invalid DID"))
+                (when-not (blob? value) (fail :INVALID "DID is not a hex number"))
+                (when-not (== 32 (count (blob value))) (fail :INVALID (str "DID is incorrect length of " (count (blob value)))))
             )
             (defn resolve? [did]
                 (assert-did did)
