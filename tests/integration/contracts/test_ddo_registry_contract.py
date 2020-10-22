@@ -13,7 +13,6 @@ from convex_api import (
 )
 from convex_api.exceptions import ConvexAPIError
 
-
 from convex_contracts.contracts.ddo_registry_contract import DDORegistryContract
 from convex_contracts.utils import auto_topup_account
 
