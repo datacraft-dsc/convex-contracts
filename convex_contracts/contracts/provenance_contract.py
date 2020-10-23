@@ -2,13 +2,12 @@
     starfish-provenance contract
 
 """
-from convex_api import ConvexAPI
 from convex_contracts.convex_contract import ConvexContract
 
 
 class ProvenanceContract(ConvexContract):
 
-    def __init__(self, name = None):
+    def __init__(self, name=None):
         ConvexContract.__init__(self, name or 'starfish-provenance', '0.0.1')
 
         self._source = f'''

@@ -2,13 +2,12 @@
     starfish-ddo-registry contract
 
 """
-from convex_api import ConvexAPI
 from convex_contracts.convex_contract import ConvexContract
 
 
 class DDORegistryContract(ConvexContract):
 
-    def __init__(self, name = None):
+    def __init__(self, name=None):
         ConvexContract.__init__(self, name or 'starfish-ddo-registry', '0.0.5')
 
         self._source = f'''
