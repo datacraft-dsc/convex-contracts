@@ -10,14 +10,13 @@ from convex_api.convex_api import ConvexAPI
 
 
 class ConvexContract:
-    def __init__(self, convex: ConvexAPI, name: str, version: str):
-        self._convex = convex
+    def __init__(self, name: str, version: str):
         self._name = name
         self._version = version
         self._source = None
         self._address = None
 
-    def deploy(self, account: ConvexAccount):
+    def deploy(self, convex: ConvexAPI, account: ConvexAccount):
         if not self._source:
             raise ValueError(f'Cannot deploy the contract {self.name} with no source text')
 
@@ -31,26 +30,26 @@ class ConvexContract:
         )
     )
 )"""
-        result = self._convex.send(deploy_line, account)
+        result = convex.send(deploy_line, account)
         if result and 'value' in result:
             self._address = result['value']
             return self._address
 
-    def load(self, deploy_account: str):
-        self._address = self.get_address(deploy_account)
-        self._version = self.get_version(deploy_account)
+    def load(self, convex: ConvexAPI, deploy_account: str):
+        self._address = self.get_address(convex, deploy_account)
+        self._version = self.get_version(convex, deploy_account)
         return (self._address, self._version)
 
-    def get_address(self, deploy_account):
-        address = self._convex.get_address(self._name, deploy_account)
+    def get_address(self, convex: ConvexAPI, deploy_account):
+        address = convex.get_address(self._name, deploy_account)
         return address
 
-    def get_version(self, deploy_account):
+    def get_version(self, convex: ConvexAPI, deploy_account):
         address = self._address
         if address is None:
-            address = self.get_address(deploy_account)
+            address = self.get_address(convex, deploy_account)
 
-        result = self._convex.query(f'(call {address} (version))', deploy_account)
+        result = convex.query(f'(call {address} (version))', deploy_account)
         if result and 'value' in result:
             return result['value']
 

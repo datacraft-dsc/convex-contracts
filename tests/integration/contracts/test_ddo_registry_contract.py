@@ -17,6 +17,7 @@ from convex_contracts.contracts.ddo_registry_contract import DDORegistryContract
 from convex_contracts.utils import auto_topup_account
 
 ddo_register_contract_address = None
+TEST_CONTRACT_NAME = 'starfish-ddo-register-test'
 
 @pytest.fixture
 def contract_address(convex, accounts):
@@ -24,18 +25,19 @@ def contract_address(convex, accounts):
     contract_account = accounts[0]
     auto_topup_account(convex, contract_account)
     if ddo_register_contract_address is None:
-        contract = DDORegistryContract(convex)
-        ddo_register_contract_address = contract.deploy(contract_account)
+        contract = DDORegistryContract(TEST_CONTRACT_NAME)
+        ddo_register_contract_address = contract.deploy(convex, contract_account)
         auto_topup_account(convex, contract_account)
     return ddo_register_contract_address
 
 
 def test_contract_version(convex, accounts, contract_address):
     contract_account = accounts[0]
-    contract = DDORegistryContract(convex)
-    version = contract.get_version(contract_account)
+    contract = DDORegistryContract(TEST_CONTRACT_NAME)
+    version = contract.get_version(convex, contract_account)
     assert(version)
     assert(version == contract.version)
+
 def test_contract_did_register_assert_did(convex, accounts, contract_address):
 
     test_account = accounts[0]
@@ -171,8 +173,8 @@ def test_contract_ddo_transfer(convex, accounts):
     other_account = accounts[1]
     auto_topup_account(convex, accounts)
 
-    ddo_registry_contract = DDORegistryContract(convex)
-    contract_address = ddo_registry_contract.get_address(test_account)
+    ddo_registry_contract = DDORegistryContract(TEST_CONTRACT_NAME)
+    contract_address = ddo_registry_contract.get_address(convex, test_account)
     assert(contract_address)
 
     did = f'0x{secrets.token_hex(32)}'
@@ -227,8 +229,8 @@ def test_contract_ddo_transfer(convex, accounts):
 
 def test_contract_ddo_bulk_register(convex, accounts):
     test_account = accounts[0]
-    ddo_registry_contract = DDORegistryContract(convex)
-    contract_address = ddo_registry_contract.get_address(test_account)
+    ddo_registry_contract = DDORegistryContract(TEST_CONTRACT_NAME)
+    contract_address = ddo_registry_contract.get_address(convex, test_account)
     assert(contract_address)
 
     for index in range(0, 2):
@@ -248,8 +250,8 @@ def test_contract_ddo_owner_list(convex, accounts):
     other_account = accounts[1]
     auto_topup_account(convex, accounts)
 
-    ddo_registry_contract = DDORegistryContract(convex)
-    contract_address = ddo_registry_contract.get_address(test_account)
+    ddo_registry_contract = DDORegistryContract(TEST_CONTRACT_NAME)
+    contract_address = ddo_registry_contract.get_address(convex, test_account)
     assert(contract_address)
 
     did_list = []

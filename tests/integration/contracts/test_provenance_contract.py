@@ -18,6 +18,8 @@ from convex_contracts.contracts.provenance_contract import ProvenanceContract
 from convex_contracts.utils import auto_topup_account
 
 
+TEST_CONTRACT_NAME = 'starfish-provenance-test'
+
 provenance_contract_address = None
 test_event_list = None
 
@@ -27,8 +29,8 @@ def contract_address(convex, accounts):
     contract_account = accounts[0]
     auto_topup_account(convex, contract_account)
     if provenance_contract_address is None:
-        contract = ProvenanceContract(convex)
-        provenance_contract_address = contract.deploy(contract_account)
+        contract = ProvenanceContract(TEST_CONTRACT_NAME)
+        provenance_contract_address = contract.deploy(convex, contract_account)
         auto_topup_account(convex, contract_account)
     return provenance_contract_address
 
@@ -62,8 +64,8 @@ def register_test_list(pytestconfig, convex, accounts, contract_address):
 
 def test_contract_version(convex, accounts, contract_address):
     contract_account = accounts[0]
-    contract = ProvenanceContract(convex)
-    version = contract.get_version(contract_account)
+    contract = ProvenanceContract(TEST_CONTRACT_NAME)
+    version = contract.get_version(convex, contract_account)
     assert(version)
     assert(version == contract.version)
 

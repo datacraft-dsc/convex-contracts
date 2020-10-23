@@ -8,8 +8,8 @@ from convex_contracts.convex_contract import ConvexContract
 
 class ProvenanceContract(ConvexContract):
 
-    def __init__(self, convex: ConvexAPI):
-        ConvexContract.__init__(self, convex, 'starfish-provenance', '0.0.1')
+    def __init__(self, name = None):
+        ConvexContract.__init__(self, name or 'starfish-provenance', '0.0.1')
 
         self._source = f'''
             (def provenance [])

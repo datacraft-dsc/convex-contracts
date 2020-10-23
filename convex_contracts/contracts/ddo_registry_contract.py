@@ -8,8 +8,8 @@ from convex_contracts.convex_contract import ConvexContract
 
 class DDORegistryContract(ConvexContract):
 
-    def __init__(self, convex: ConvexAPI):
-        ConvexContract.__init__(self, convex, 'starfish-ddo-registry', '0.0.5')
+    def __init__(self, name = None):
+        ConvexContract.__init__(self, name or 'starfish-ddo-registry', '0.0.5')
 
         self._source = f'''
             (def registry {{}})
