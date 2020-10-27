@@ -109,9 +109,9 @@ def main():
             'contracts': {}
         }
         for class_name, contract_class in contract_items.items():
-            contract = contract_class(convex)
+            contract = contract_class()
             logger.debug(f'deploying contract {class_name} {contract.name}')
-            values['contracts'][contract.name] = contract.deploy(account)
+            values['contracts'][contract.name] = contract.deploy(convex, account)
         print(json.dumps(values, sort_keys=True, indent=4))
 
 
