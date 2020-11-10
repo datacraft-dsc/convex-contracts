@@ -11,6 +11,7 @@ import importlib
 import inspect
 import json
 import logging
+import re
 import os
 
 
@@ -96,6 +97,7 @@ def main():
         keyfile = os.environ.get('KEYFILE', args.keyfile)
         password = os.environ.get('PASSWORD', args.password)
         if keyword:
+            keyword = re.sub('_', ' ', keyword)
             account = ConvexAccount.import_from_mnemonic(keyword)
         else:
             if keyfile is None or password is None:
