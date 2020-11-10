@@ -20,4 +20,3 @@ jobs:
       run: ./tools/convex_contract_tool.py --auto-topup deploy"
       env:
         KEYWORD: ${{ secrets.DEPLOY_TEST_KEYWORD }}
-

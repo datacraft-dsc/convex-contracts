@@ -91,20 +91,24 @@ def main():
         logging.getLogger('urllib3').setLevel(logging.INFO)
 
     if args.command == 'deploy':
-        if args.keyword or 'KEYWORD' in os.environ:
-            account = ConvexAccount.import_from_mnemonic(os.environ.get('KEYWORD', args.keyword))
+        url = os.environ.get('URL', args.url)
+        keyword = os.environ.get('KEYWORD', args.keyword)
+        keyfile = os.environ.get('KEYFILE', args.keyfile)
+        password = os.environ.get('PASSWORD', args.password)
+        if keyword:
+            account = ConvexAccount.import_from_mnemonic(keyword)
         else:
-            if args.keyfile is None or args.password is None:
+            if keyfile is None or password is None:
                 print('You need to provide an account keyfile and password to deploy the contracts')
                 return
-            logger.debug(f'loading account keyfile {args.keyfile}')
-            if not os.path.exists(args.keyfile):
-                print(f'Cannot find account keyfile {args.keyfile}')
-            account = ConvexAccount.import_from_file(args.keyfile, args.password)
-        logger.debug(f'connecting to convex network {args.url}')
-        convex = ConvexAPI(args.url)
+            logger.debug(f'loading account keyfile {keyfile}')
+            if not os.path.exists(keyfile):
+                print(f'Cannot find account keyfile {keyfile}')
+            account = ConvexAccount.import_from_file(keyfile, password)
+        logger.debug(f'connecting to convex network {url}')
+        convex = ConvexAPI(url)
         if not convex:
-            print(f'Cannot connect to the convex network at {args.url}')
+            print(f'Cannot connect to the convex network at {url}')
             return
 
         if args.auto_topup:
