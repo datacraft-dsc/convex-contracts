@@ -45,7 +45,7 @@ Using the convex api to get the contract address based on the contract name and 
 
 If for some reason the test convex.world block chain network gets reset, and the test contracts are no longer available.
 
-You can deploy the contracts again, by pushing to the **master** branch. See the action [contract_deploy](https://github.com/DEX-Company/convex-contracts/blob/19a30899ba391ba8dd5e79f41125b9585f68030e/.github/workflows/contracts_deploy.yml#L20)
+You can deploy the contracts again, by pushing to the **master** branch, or by re-running a past contracts_deploy workflow. See the [workflow contracts_deploy](https://github.com/DEX-Company/convex-contracts/actions?query=workflow%3Acontracts_deploy)
 
 ## License
 
