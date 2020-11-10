@@ -17,7 +17,5 @@ jobs:
     - name: Install dependencies
       run: make install IGNORE_VENV=1
     - name: Deploy test contracts
-      run: ./tools/convex_contract_tool.py --keyword="$DEPLOY_KEYWORD" --auto-topup deploy"
-      env:
-        DEPLOY_KEYWORD: ${{ secrets.DEPLOY_TEST_KEYWORD }}
+      run: ./tools/convex_contract_tool.py --keyword=${{ secrets.DEPLOY_TEST_KEYWORD }} --auto-topup deploy"
 
