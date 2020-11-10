@@ -91,8 +91,8 @@ def main():
         logging.getLogger('urllib3').setLevel(logging.INFO)
 
     if args.command == 'deploy':
-        if args.keyword:
-            account = ConvexAccount.import_from_mnemonic(args.keyword)
+        if args.keyword or 'KEYWORD' in os.environ:
+            account = ConvexAccount.import_from_mnemonic(os.environ.get('KEYWORD', args.keyword))
         else:
             if args.keyfile is None or args.password is None:
                 print('You need to provide an account keyfile and password to deploy the contracts')
