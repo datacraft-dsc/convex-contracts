@@ -10,6 +10,34 @@
 
  [Developer Dex team][developer@dex.sg]
 
+## Deploy Contracts
+
+To deploy contracts you need to run the `./tools/convex_contract_tool.py`.
+
+```bash
+
+./tools/convex_contract_tool.py --keyword="secret keywords you get from a private store which is not stored in git" deploy
+
+```
+
+## Contract owner address
+
+**Contract owner address: 0x1de659d38a129e2358cd3c4af906bc5ee48b33f27915539897f9fd66813e2beb**
+
+## Contract Names
+
++   starfish-ddo-registry
++   starfish-provenance
+
+## Getting contract addresses
+
+Using the convex api to get the contract address based on the contract name and owner address.
+
+```python
+    # Example to get the starfish-ddo-registry address
+    convex = ConvexAPI('https://convex.world')
+    starfish_ddo_contract_address = convex.get_address('starfish-ddo-registry', '0x1de659d38a129e2358cd3c4af906bc5ee48b33f27915539897f9fd66813e2beb')
+```
 
 ## License
 

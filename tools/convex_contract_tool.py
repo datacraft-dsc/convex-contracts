@@ -62,6 +62,11 @@ def main():
     )
 
     parser.add_argument(
+        '--keyword',
+        help='private key as key words'
+    )
+
+    parser.add_argument(
         '-p',
         '--password',
         help='password to access the account'
@@ -86,13 +91,16 @@ def main():
         logging.getLogger('urllib3').setLevel(logging.INFO)
 
     if args.command == 'deploy':
-        if args.keyfile is None or args.password is None:
-            print('You need to provide an account keyfile and password to deploy the contracts')
-            return
-        logger.debug(f'loading account keyfile {args.keyfile}')
-        if not os.path.exists(args.keyfile):
-            print(f'Cannot find account keyfile {args.keyfile}')
-        account = ConvexAccount.import_from_file(args.keyfile, args.password)
+        if args.keyword:
+            account = ConvexAccount.import_from_mnemonic(args.keyword)
+        else:
+            if args.keyfile is None or args.password is None:
+                print('You need to provide an account keyfile and password to deploy the contracts')
+                return
+            logger.debug(f'loading account keyfile {args.keyfile}')
+            if not os.path.exists(args.keyfile):
+                print(f'Cannot find account keyfile {args.keyfile}')
+            account = ConvexAccount.import_from_file(args.keyfile, args.password)
         logger.debug(f'connecting to convex network {args.url}')
         convex = ConvexAPI(args.url)
         if not convex:
