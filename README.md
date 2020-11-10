@@ -41,6 +41,12 @@ Using the convex api to get the contract address based on the contract name and 
     starfish_ddo_contract_address = convex.get_address('starfish-ddo-registry', '0x1de659d38a129e2358cd3c4af906bc5ee48b33f27915539897f9fd66813e2beb')
 ```
 
+## Auto deploying the contracts
+
+If for some reason the test convex.world block chain network gets reset, and the test contracts are no longer available.
+
+You can deploy the contracts again, by pushing to the **master** branch. See the action [contract_deploy](https://github.com/DEX-Company/convex-contracts/blob/19a30899ba391ba8dd5e79f41125b9585f68030e/.github/workflows/contracts_deploy.yml#L20)
+
 ## License
 
 ```
