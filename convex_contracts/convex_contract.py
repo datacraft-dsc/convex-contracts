@@ -32,7 +32,7 @@ class ConvexContract:
 )"""
         result = convex.send(deploy_line, account)
         if result and 'value' in result:
-            self._address = result['value']
+            self._address = f'0x{result["value"]}'
             return self._address
 
     def load(self, convex: ConvexAPI, deploy_account: str):

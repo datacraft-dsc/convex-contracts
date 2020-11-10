@@ -22,7 +22,9 @@ To deploy contracts you need to run the `./tools/convex_contract_tool.py`.
 
 ## Contract owner address
 
-**Contract owner address: 0x1de659d38a129e2358cd3c4af906bc5ee48b33f27915539897f9fd66813e2beb**
+**0x1de659d38a129e2358cd3c4af906bc5ee48b33f27915539897f9fd66813e2beb**
+
+You need to use the owner address to get the actual contract addresses below.
 
 ## Contract Names
 

@@ -49,7 +49,8 @@ def register_test_list(pytestconfig, convex, accounts, contract_address):
         register_account = other_account
         for index in range(0, event_count):
             if index % 2 == 0:
-                asset_id = '0x' + secrets.token_hex(32)
+                asset_id_hex = secrets.token_hex(32)
+                asset_id = f'0x{asset_id_hex}'
                 if register_account.address == test_account.address:
                     register_account = other_account
                 else:
@@ -57,7 +58,7 @@ def register_test_list(pytestconfig, convex, accounts, contract_address):
             result = convex.send(f'(call {contract_address} (register {asset_id}))', register_account)
             assert(result)
             record = result['value']
-            assert(record['asset-id'] == asset_id)
+            assert(record['asset-id'] == asset_id_hex)
             test_event_list.append(record)
     return test_event_list
 
@@ -75,7 +76,8 @@ def test_provenance_contract_register(register_test_list):
 def test_provenance_contract_event_list(convex, accounts, contract_address, register_test_list):
     test_account = accounts[0]
     record = register_test_list[secrets.randbelow(len(register_test_list))]
-    result = convex.query(f'(call {contract_address} (event-list {record["asset-id"]}))', test_account)
+    asset_id = f'0x{record["asset-id"]}'
+    result = convex.query(f'(call {contract_address} (event-list {asset_id}))', test_account)
     assert(result)
     event_list = result['value']
     assert(event_list)
@@ -91,7 +93,8 @@ def test_provenance_contract_event_owner_list(convex, accounts, contract_address
     for item in register_test_list:
         if item['owner'] == record['owner']:
             owner_count += 1
-    result = convex.query(f'(call {contract_address} (event-owner {record["owner"]}))', other_account)
+    owner_address = f'0x{record["owner"]}'
+    result = convex.query(f'(call {contract_address} (event-owner {owner_address}))', other_account)
     event_list = result['value']
     assert(event_list)
     assert(len(event_list) >= owner_count)

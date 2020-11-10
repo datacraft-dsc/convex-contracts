@@ -61,7 +61,7 @@ def test_contract_did_register_assert_did(convex, accounts, contract_address):
     command = f'(call {contract_address} (register 0x{did_valid} "{ddo}"))'
     result = convex.send(command, test_account)
     assert(result['value'])
-    assert(result['value'] == f'0x{did_valid}')
+    assert(result['value'] == did_valid)
 
 
 def test_contract_did_register_resolve(convex, accounts, contract_address):
@@ -71,7 +71,8 @@ def test_contract_did_register_resolve(convex, accounts, contract_address):
 
     auto_topup_account(convex, accounts)
 
-    did = f'0x{secrets.token_hex(32)}'
+    did_hex = secrets.token_hex(32)
+    did = f'0x{did_hex}'
     ddo = 'test - ddo'
 
 
@@ -80,7 +81,7 @@ def test_contract_did_register_resolve(convex, accounts, contract_address):
     command = f'(call {contract_address} (register {did} "{ddo}"))'
     result = convex.send(command, test_account)
     assert(result['value'])
-    assert(result['value'] == did)
+    assert(result['value'] == did_hex)
 
     # call resolve did to ddo
 
@@ -110,7 +111,7 @@ def test_contract_did_register_resolve(convex, accounts, contract_address):
     bad_did = f'0x{secrets.token_hex(32)}'
     command = f'(call {contract_address} (resolve {bad_did}))'
     result = convex.query(command, test_account)
-    assert(result['value'] == '')
+    assert(result['value'] is None)
 
 
     new_ddo = 'new - ddo'
@@ -119,7 +120,7 @@ def test_contract_did_register_resolve(convex, accounts, contract_address):
     command = f'(call {contract_address} (register {did} "{new_ddo}"))'
     result = convex.send(command, test_account)
     assert(result['value'])
-    assert(result['value'] == did)
+    assert(result['value'] == did_hex)
 
 
     # call register - update from other account
@@ -149,20 +150,20 @@ def test_contract_did_register_resolve(convex, accounts, contract_address):
     command = f'(call {contract_address} (unregister {did}))'
     result = convex.send(command, test_account)
     assert(result['value'])
-    assert(result['value'] == did)
+    assert(result['value'] == did_hex)
 
     # call resolve did to empty
 
     command = f'(call {contract_address} (resolve {did}))'
     result = convex.query(command, test_account)
-    assert(result['value'] == '')
+    assert(result['value'] is None)
 
 
     # call unregister - unknown did
 
     command = f'(call {contract_address} (unregister {bad_did}))'
     result = convex.send(command, test_account)
-    assert(result['value'] == '')
+    assert(result['value'] is None)
 
 
 
@@ -177,13 +178,14 @@ def test_contract_ddo_transfer(convex, accounts):
     contract_address = ddo_registry_contract.get_address(convex, test_account)
     assert(contract_address)
 
-    did = f'0x{secrets.token_hex(32)}'
+    did_hex = secrets.token_hex(32)
+    did = f'0x{did_hex}'
     ddo = 'test - ddo'
 
     command = f'(call {contract_address} (register {did} "{ddo}"))'
     result = convex.send(command, test_account)
     assert(result['value'])
-    assert(result['value'] == did)
+    assert(result['value'] == did_hex)
 
     # call owner? on owner account
     command = f'(call {contract_address} (owner? {did}))'
@@ -199,7 +201,7 @@ def test_contract_ddo_transfer(convex, accounts):
     command = f'(call {contract_address} (transfer {did} {other_account.address_checksum}))'
     result = convex.send(command, test_account)
     assert(result['value'])
-    assert(result['value'][0] == did)
+    assert(result['value'][0] == did_hex)
 
     #check ownership to different accounts
 
@@ -225,7 +227,7 @@ def test_contract_ddo_transfer(convex, accounts):
     command = f'(call {contract_address} (unregister {did}))'
     result = convex.send(command, other_account)
     assert(result['value'])
-    assert(result['value'] == did)
+    assert(result['value'] == did_hex)
 
 def test_contract_ddo_bulk_register(convex, accounts):
     test_account = accounts[0]
@@ -235,14 +237,15 @@ def test_contract_ddo_bulk_register(convex, accounts):
 
     for index in range(0, 2):
         auto_topup_account(convex, test_account, 40000000)
-        did = f'0x{secrets.token_hex(32)}'
+        did_hex = secrets.token_hex(32)
+        did = f'0x{did_hex}'
 #        ddo = secrets.token_hex(51200)
         ddo = secrets.token_hex(1024)
 
         command = f'(call {contract_address} (register {did} "{ddo}"))'
         result = convex.send(command, test_account)
         assert(result['value'])
-        assert(result['value'] == did)
+        assert(result['value'] == did_hex)
 
 def test_contract_ddo_owner_list(convex, accounts):
 
@@ -257,20 +260,21 @@ def test_contract_ddo_owner_list(convex, accounts):
     did_list = []
     for index in range(0, 4):
         auto_topup_account(convex, test_account)
-        did = f'0x{secrets.token_hex(32)}'
-        did_list.append(did)
+        did_hex = secrets.token_hex(32)
+        did = f'0x{did_hex}'
+        did_list.append(did_hex)
 #        ddo = secrets.token_hex(51200)
         ddo = f'ddo test - {index}'
 
         command = f'(call {contract_address} (register {did} "{ddo}"))'
         result = convex.send(command, test_account)
         assert(result['value'])
-        assert(result['value'] == did)
+        assert(result['value'] == did_hex)
 
 
     command = f'(call {contract_address} (owner-list "{test_account.address_api}"))'
     result = convex.query(command, test_account)
     assert(result['value'])
-    for did in did_list:
-        assert(did in result['value'])
+    for did_hex in did_list:
+        assert(did_hex in result['value'])
 
