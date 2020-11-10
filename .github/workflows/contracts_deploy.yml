@@ -1,0 +1,21 @@
+name: contracts_deploy
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  contracts_deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: make install IGNORE_VENV=1
+    - name: Deploy test contracts
+      run: ./tools/convex_contract_tool.py --keyword="{{ $secrects.DEPLOY_TEST_KEYWORD }} --auto-topup deploy"
+
