@@ -23,7 +23,7 @@ def accounts(config):
     account_1 = config['accounts']['account1']
     result = [
         ConvexAccount.import_from_file(account_1['keyfile'], account_1['password']),
-        ConvexAccount.create_new(),
+        ConvexAccount.create(),
     ]
     return result
 
