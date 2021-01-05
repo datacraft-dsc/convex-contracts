@@ -1,10 +1,10 @@
 # VERSION:      0.1
 # DESCRIPTION:  convex-contracts
-# AUTHOR:       DEX
+# AUTHOR:       Datacraft
 # COMMENTS:
 #       This deploys the starfish contracts on the convex development network
 # USAGE:
-#       docker run docker.pkg.github.com/dex-company/convex-contracts/deploy-testing:latest
+#       docker run docker.pkg.github.com/datacraft-dscF/convex-contracts/deploy-testing:latest
 
 FROM alpine:latest
 

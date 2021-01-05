@@ -50,8 +50,8 @@ docs_requirements = [
 ]
 
 setup(
-    author="dex-company",
-    author_email='devops@dex.sg',
+    author="datacraft-dsc",
+    author_email='devops@datacraft.sg',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
@@ -59,7 +59,7 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3.6',
     ],
-    description="Convex Contracts for the Dex Starfish Development System",
+    description="Convex Contracts for the Datacraft Starfish Development System",
     extras_require={
         'test': test_requirements,
         'docs': docs_requirements,
@@ -80,7 +80,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/DEX-Company/convex-contracts',
+    url='https://github.com/datacraft-dsc/convex-contracts',
     version='0.0.1',
     zip_safe=False,
 )

@@ -1,14 +1,14 @@
 # Convex Contracts
 
-![testing](https://github.com/DEX-Company/convex-contracts/workflows/testing/badge.svg)
-![contracts_deploy](https://github.com/DEX-Company/convex-contracts/workflows/contracts_deploy/badge.svg)
+![testing](https://github.com/datacraft-dsc/convex-contracts/workflows/testing/badge.svg)
+![contracts_deploy](https://github.com/datacraft-dsc/convex-contracts/workflows/contracts_deploy/badge.svg)
 
 ---
 
 
 ## Maintainers
 
- [Developer Dex team][developer@dex.sg]
+ [Developer Datacraft team][developer@datacraft.sg]
 
 ## Deploy Contracts
 
@@ -45,12 +45,12 @@ Using the convex api to get the contract address based on the contract name and 
 
 If for some reason the test convex.world block chain network gets reset, and the test contracts are no longer available.
 
-You can deploy the contracts again, by pushing to the **master** branch, or by re-running a past contracts_deploy workflow. See the [workflow contracts_deploy](https://github.com/DEX-Company/convex-contracts/actions?query=workflow%3Acontracts_deploy)
+You can deploy the contracts again, by pushing to the **master** branch, or by re-running a past contracts_deploy workflow. See the [workflow contracts_deploy](https://github.com/datacraft-dsc/convex-contracts/actions?query=workflow%3Acontracts_deploy)
 
 ## License
 
 ```
-Copyright 2018-2020 DEX Pte. Ltd.
+Copyright 2018-2021 Datacraft Pte. Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
