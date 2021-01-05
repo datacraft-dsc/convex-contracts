@@ -8,7 +8,7 @@
 
 ## Maintainers
 
- [Developer Datacraft team][developer@datacraft.sg]
+ [Developer Datacraft team](developer@datacraft.sg)
 
 ## Deploy Contracts
 
