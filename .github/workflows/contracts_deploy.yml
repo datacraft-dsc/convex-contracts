@@ -3,7 +3,7 @@ name: contracts_deploy
 on:
   push:
     branches:
-    - master
+    - release
 
 jobs:
   contracts_deploy:

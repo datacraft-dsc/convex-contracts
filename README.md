@@ -47,6 +47,10 @@ If for some reason the test convex.world block chain network gets reset, and the
 
 You can deploy the contracts again, by pushing to the **master** branch, or by re-running a past contracts_deploy workflow. See the [workflow contracts_deploy](https://github.com/datacraft-dsc/convex-contracts/actions?query=workflow%3Acontracts_deploy)
 
+## Release Process
+
+See [Release Process](https://github.com/datacraft-dsc/convex-contracts/blob/develop/RELEASE_PROCESS.md)
+
 ## License
 
 ```
