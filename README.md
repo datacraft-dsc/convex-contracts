@@ -47,7 +47,7 @@ Using the contract class, it will resolve the correct address.
 
 ```python
     >>> from convex_api import ConvexAPI
-    >>> from convex_contracts.contracts.ddo_registry_contract import DIDRegistryContract
+    >>> from convex_contracts.contracts import DIDRegistryContract
 
     >>> convex_api = ConvexAPI('https://convex.world')
     >>> contract = DIDRegistryContract(convex_api)
@@ -63,6 +63,8 @@ Using the contract class, it will resolve the correct address.
 ```
 
 ## Using the contract in the convex sandbox
+
+You need to start a convex sandbox at https://convex.world/sandbox
 
 ```
     (import starfish.did :as did)
