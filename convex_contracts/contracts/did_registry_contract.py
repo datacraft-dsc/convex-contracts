@@ -1,5 +1,5 @@
 """
-    starfish-ddo-registry contract
+    starfish.did contract
 
 (import convex.trust :as trust)
 (trust/trusted? owner *caller*)
@@ -9,10 +9,10 @@
 from convex_contracts.convex_contract import ConvexContract
 
 
-class DDORegistryContract(ConvexContract):
+class DIDRegistryContract(ConvexContract):
 
     def __init__(self, convex, name=None):
-        ConvexContract.__init__(self, convex, name or 'starfish.did', '0.0.5')
+        ConvexContract.__init__(self, convex, name or 'starfish.did', '0.0.1')
 
         self._source = f'''
             (def registry {{}})

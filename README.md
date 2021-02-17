@@ -46,10 +46,10 @@ Using the contract class, it will resolve the correct address.
 
 ```python
     >>> from convex_api import ConvexAPI
-    >>> from convex_contracts.contracts.ddo_registry_contract import DDORegistryContract
+    >>> from convex_contracts.contracts.ddo_registry_contract import DIDRegistryContract
 
     >>> convex_api = ConvexAPI('https://convex.world')
-    >>> contract = DDORegistryContract(convex_api)
+    >>> contract = DIDRegistryContract(convex_api)
     >>> contract.address
     1483
     >>> contract.owner_address

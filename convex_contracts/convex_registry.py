@@ -55,7 +55,6 @@ class ConvexRegistry:
 
     def resolve_owner(self, name):
         item = self.item(name)
-        print('owner', item)
         if item:
             return item[1]
 

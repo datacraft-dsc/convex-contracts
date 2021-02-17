@@ -112,12 +112,8 @@ def main():
             print(f'Cannot connect to the convex network at {url}')
             return
 
-
         contract_items = load_contracts(CONTRACT_PACKAGE)
-        values = {
-            'address': account.address,
-            'contracts': {}
-        }
+        values = {}
         for class_name, contract_class in contract_items.items():
             contract = contract_class()
             if contract.address:
@@ -135,7 +131,7 @@ def main():
             logger.debug(f'deploying contract {class_name} {contract.name} #{contract_account.address}')
             if contract.deploy(contract_account):
                 if contract.register(contract_account):
-                    values['contracts'][contract.name] = contract.address
+                    values[contract.name] = contract.address
         print(json.dumps(values, sort_keys=True, indent=4))
 
 
