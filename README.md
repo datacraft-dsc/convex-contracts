@@ -22,8 +22,9 @@ To deploy contracts you need to run the `./tools/convex_contract_tool.py`.
 
 ## Contract names
 
-**starfish.did**
-**starfish.provenance**
++ **starfish.did**
+
++ **starfish.provenance**
 
 You need these names to use the contracts below.
 
@@ -65,8 +66,12 @@ Using the contract class, it will resolve the correct address.
 
 ```
     (import starfish.did :as did)
-    (did/register 0xe5b56a945e6ea79debe04028fef0345297b02d3087d28ffac953c2bfc2c58aaa "test - ddo")
 
+    *aliases*
+        {did 1483}
+
+    (did/register 0xe5b56a945e6ea79debe04028fef0345297b02d3087d28ffac953c2bfc2c58aaa "test - ddo")
+        0xe5b56a945e6ea79debe04028fef0345297b02d3087d28ffac953c2bfc2c58aaa
 ```
 
 ## Auto deploying the contracts
