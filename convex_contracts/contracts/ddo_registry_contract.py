@@ -12,7 +12,7 @@ from convex_contracts.convex_contract import ConvexContract
 class DDORegistryContract(ConvexContract):
 
     def __init__(self, convex, name=None):
-        ConvexContract.__init__(self, convex, name or 'starfish.ddo', '0.0.5')
+        ConvexContract.__init__(self, convex, name or 'starfish.did', '0.0.5')
 
         self._source = f'''
             (def registry {{}})

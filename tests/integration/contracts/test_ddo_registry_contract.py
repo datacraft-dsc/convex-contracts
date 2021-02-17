@@ -20,7 +20,7 @@ from tests.helpers import (
 )
 
 is_contract_deployed = False
-TEST_CONTRACT_NAME = 'starfish-test.ddo'
+TEST_CONTRACT_NAME = 'starfish-test.did'
 
 @pytest.fixture
 def ddo_contract(convex, account_import):

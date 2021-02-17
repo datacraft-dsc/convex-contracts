@@ -19,9 +19,8 @@ from convex_api import Account as ConvexAccount
 from convex_api import ConvexAPI
 
 from convex_contracts.convex_contract import ConvexContract
-from convex_contracts.utils import auto_topup_account
 
-
+TOPUP_AMOUNT = 10000000
 CONTRACT_PACKAGE = 'convex_contracts.contracts'
 DEFAULT_URL = 'https://convex.world'
 
@@ -98,7 +97,7 @@ def main():
         password = os.environ.get('PASSWORD', args.password)
         if keyword:
             keyword = re.sub('_', ' ', keyword)
-            account = ConvexAccount.import_from_mnemonic(keyword)
+            account_import = ConvexAccount.import_from_mnemonic(keyword)
         else:
             if keyfile is None or password is None:
                 print('You need to provide an account keyfile and password to deploy the contracts')
@@ -106,16 +105,13 @@ def main():
             logger.debug(f'loading account keyfile {keyfile}')
             if not os.path.exists(keyfile):
                 print(f'Cannot find account keyfile {keyfile}')
-            account = ConvexAccount.import_from_file(keyfile, password)
+            account_import = ConvexAccount.import_from_file(keyfile, password)
         logger.debug(f'connecting to convex network {url}')
         convex = ConvexAPI(url)
         if not convex:
             print(f'Cannot connect to the convex network at {url}')
             return
 
-        if args.auto_topup:
-            logger.debug('auto topup of account balance')
-            auto_topup_account(convex, account)
 
         contract_items = load_contracts(CONTRACT_PACKAGE)
         values = {
@@ -124,8 +120,22 @@ def main():
         }
         for class_name, contract_class in contract_items.items():
             contract = contract_class()
-            logger.debug(f'deploying contract {class_name} {contract.name}')
-            values['contracts'][contract.name] = contract.deploy(convex, account)
+            if contract.address:
+                contract_account = account_import.copy()
+                contract_account.address = contract.owner_address
+                logger.debug(f'setting account address: {contract_account.address}')
+            else:
+                contract_account = convex.create_account(account_import)
+                logger.debug(f'creating new account address: {contract_account.address}')
+
+            if args.auto_topup:
+                logger.debug('auto topup of account balance')
+                convex.topup_account(contract_account, TOPUP_AMOUNT)
+
+            logger.debug(f'deploying contract {class_name} {contract.name} #{contract_account.address}')
+            if contract.deploy(contract_account):
+                if contract.register(contract_account):
+                    values['contracts'][contract.name] = contract.address
         print(json.dumps(values, sort_keys=True, indent=4))
 
 

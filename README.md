@@ -20,25 +20,53 @@ To deploy contracts you need to run the `./tools/convex_contract_tool.py`.
 
 ```
 
-## Contract owner address
+## Contract names
 
-**0x1de659d38a129e2358cd3c4af906bc5ee48b33f27915539897f9fd66813e2beb**
+**starfish.did**
+**starfish.provenance**
 
-You need to use the owner address to get the actual contract addresses below.
+You need these names to use the contracts below.
 
-## Contract Names
 
-+   starfish-ddo-registry
-+   starfish-provenance
-
-## Getting contract addresses
+## Getting contract addresses using convex
 
 Using the convex api to get the contract address based on the contract name and owner address.
 
 ```python
-    # Example to get the starfish-ddo-registry address
-    convex = ConvexAPI('https://convex.world')
-    starfish_ddo_contract_address = convex.get_address('starfish-ddo-registry', '0x1de659d38a129e2358cd3c4af906bc5ee48b33f27915539897f9fd66813e2beb')
+    >>> from convex_api import ConvexAPI
+    >>> convex_api = ConvexAPI('https://convex.world')
+    >>> convex_api.query('(call *registry* (cns-resolve "starfish-test.did"))', 9)
+    {'value': 1483}
+
+```
+
+## Getting contract addresses using the contract class
+
+Using the contract class, it will resolve the correct address.
+
+```python
+    >>> from convex_api import ConvexAPI
+    >>> from convex_contracts.contracts.ddo_registry_contract import DDORegistryContract
+
+    >>> convex_api = ConvexAPI('https://convex.world')
+    >>> contract = DDORegistryContract(convex_api)
+    >>> contract.address
+    1483
+    >>> contract.owner_address
+    1482
+    >>> account = convex_api.create_account()
+    >>> convex_api.topup_account(account)
+    >>> contract.send('(register 0xe5b56a945e6ea79debe04028fef0345297b02d3087d28ffac953c2bfc2c58aaa "test - ddo")', account)
+    {'value': 'e5b56a945e6ea79debe04028fef0345297b02d3087d28ffac953c2bfc2c58aaa'}
+
+```
+
+## Using the contract in the convex sandbox
+
+```
+    (import starfish.did :as did)
+    (did/register 0xe5b56a945e6ea79debe04028fef0345297b02d3087d28ffac953c2bfc2c58aaa "test - ddo")
+
 ```
 
 ## Auto deploying the contracts
