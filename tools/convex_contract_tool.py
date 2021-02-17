@@ -115,7 +115,7 @@ def main():
         contract_items = load_contracts(CONTRACT_PACKAGE)
         values = {}
         for class_name, contract_class in contract_items.items():
-            contract = contract_class()
+            contract = contract_class(convex)
             if contract.address:
                 contract_account = account_import.copy()
                 contract_account.address = contract.owner_address
