@@ -6,6 +6,8 @@ import logging
 from convex_api import ConvexAPI
 from convex_api import Account as ConvexAccount
 
+from tests.helpers import topup_accounts
+
 INTEGRATION_PATH = pathlib.Path.cwd() / 'tests' / 'integration'
 
 logging.getLogger('urllib3').setLevel(logging.INFO)
@@ -17,13 +19,22 @@ def convex(config):
 
 
 @pytest.fixture(scope='module')
-def accounts(config):
+def account_import(config, convex):
     result = []
     # load in the test accounts
     account_1 = config['accounts']['account1']
-    result = [
-        ConvexAccount.import_from_file(account_1['keyfile'], account_1['password']),
-        ConvexAccount.create(),
+    return ConvexAccount.import_from_file(account_1['keyfile'], account_1['password'])
+
+@pytest.fixture(scope='module')
+def accounts(config, convex):
+    result = []
+    # load in the test accounts
+    account_1 = config['accounts']['account1']
+    account_import = ConvexAccount.import_from_file(account_1['keyfile'], account_1['password'])
+    accounts = [
+        convex.create_account(account_import),
+        convex.create_account(account_import),
     ]
-    return result
+    topup_accounts(convex, accounts)
+    return accounts
 
