@@ -11,7 +11,8 @@ class ProvenanceContract(ConvexContract):
         ConvexContract.__init__(self, convex, name or 'starfish.provenance', '0.0.1')
 
         self._source = f'''
-            (def provenance [])
+            (def provenance-asset {{}})
+            (def provenance-owner {{}})
             (defn version [] "{self.version}")
             (defn assert-asset-id [value]
                 (when-not (and (blob? value) (== 32 (count (blob value)))) (fail "INVALID" "invalid asset-id"))
@@ -21,31 +22,33 @@ class ProvenanceContract(ConvexContract):
             )
             (defn register [asset-id]
                 (assert-asset-id asset-id)
-                (let [record {{:owner *caller* :timestamp *timestamp* :asset-id (blob asset-id)}}]
-                    (def provenance (conj provenance record))
+                (let [record {{:owner *caller* :timestamp *timestamp*}}]
+                    (def provenance-asset
+                        (assoc provenance-asset (blob asset-id)
+                            (conj (get provenance-asset (blob asset-id))
+                            record)
+                        )
+                    )
+                    (def provenance-owner
+                        (assoc provenance-owner *caller*
+                            (conj (get provenance-owner *caller*)
+                            (blob asset-id))
+                        )
+                    )
                     record
                 )
             )
             (defn event-list [asset-id]
                 (assert-asset-id asset-id)
-                (mapcat (fn [record] (when (= (blob asset-id) (record :asset-id)) [record])) provenance)
+                (get provenance-asset (blob asset-id))
             )
-            (defn event-owner [owner-id]
+            (defn asset-list []
+               (keys provenance-asset)
+            )
+            (defn owner-list [owner-id]
                 (assert-address owner-id)
-                (mapcat (fn [record] (when (= (address owner-id) (record :owner)) [record])) provenance)
+                (get provenance-owner (address owner-id))
             )
-            (defn event-timestamp [time-from time-to]
-                (mapcat
-                    (fn [record]
-                        (when
-                            (and
-                                (<= time-from (record :timestamp))
-                                (>= time-to (record :timestamp))
-                            )
-                        [record] )
-                    )
-                provenance)
-            )
-            (export event-list event-owner event-timestamp register version)
+            (export asset-list event-list owner-list register version)
 
 '''

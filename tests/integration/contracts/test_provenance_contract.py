@@ -58,7 +58,8 @@ def register_test_list(pytestconfig, convex, provenance_contract, accounts):
             result = provenance_contract.send(f'(register {asset_id})', register_account)
             assert(result)
             record = result['value']
-            assert(record['asset-id'] == asset_id_hex)
+            assert(record['owner'] == register_account.address)
+            record['asset_id'] = asset_id
             test_event_list.append(record)
     return test_event_list
 
@@ -72,15 +73,15 @@ def test_provenance_contract_event_list(convex, provenance_contract, accounts, r
     topup_accounts(convex, account_test)
 
     record = register_test_list[secrets.randbelow(len(register_test_list))]
-    asset_id = f'0x{record["asset-id"]}'
+    asset_id = record['asset_id']
     result = provenance_contract.query(f'(event-list {asset_id})', account_test)
     assert(result)
     event_list = result['value']
     assert(event_list)
     assert(len(event_list) == 2)
     event_item = event_list[0]
-    assert(event_item['asset-id'] == record['asset-id'])
     assert(event_item['owner'] == record['owner'])
+    assert(event_item['timestamp'])
 
 
 def test_provenance_contract_event_owner_list(convex, provenance_contract, accounts, register_test_list):
@@ -91,41 +92,11 @@ def test_provenance_contract_event_owner_list(convex, provenance_contract, accou
     for item in register_test_list:
         if item['owner'] == record['owner']:
             owner_count += 1
-    owner_address = to_address(record["owner"])
-    result = provenance_contract.query(f'(event-owner {owner_address})', account_other)
-    event_list = result['value']
-    assert(event_list)
-    assert(len(event_list) >= owner_count)
-    for event_item in event_list:
-        assert(event_item['owner'] == record["owner"])
-
-
-def test_provenance_contract_event_timestamp_list(convex, provenance_contract, accounts, register_test_list):
-    account_test = accounts[0]
-    topup_accounts(convex, account_test)
-    record_from = register_test_list[2]
-    record_to = register_test_list[len(register_test_list) - 2]
-    timestamp_from = record_from['timestamp']
-    timestamp_to = record_to['timestamp']
-    result = provenance_contract.query(f'(event-timestamp {timestamp_from} {timestamp_to})', account_test)
-    event_list = result['value']
-    assert(event_list)
-    assert(len(event_list) == len(register_test_list) - 3)
-    for event_item in event_list:
-        assert(event_item['timestamp'] >= timestamp_from and event_item['timestamp'] <= timestamp_to)
-
-
-def test_provenance_contract_event_timestamp_item(convex, provenance_contract, accounts, register_test_list):
-    account_test = accounts[0]
-    topup_accounts(convex, account_test)
-
-    record = register_test_list[secrets.randbelow(len(register_test_list))]
-    timestamp = record['timestamp']
-    result = provenance_contract.query(f'(event-timestamp {timestamp} {timestamp})', account_test)
-    event_list = result['value']
-    assert(len(event_list) == 1)
-    event_item = event_list[0]
-    assert(event_item['timestamp'] == timestamp)
+    owner_address = to_address(record['owner'])
+    result = provenance_contract.query(f'(owner-list {owner_address})', account_other)
+    asset_list = result['value']
+    assert(asset_list)
+    assert(len(asset_list) >= owner_count)
 
 
 def test_bad_asset_id(convex, provenance_contract, accounts):
