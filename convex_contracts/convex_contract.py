@@ -9,13 +9,13 @@ from convex_api.account import Account as ConvexAccount
 from convex_api.convex_api import ConvexAPI
 from convex_api.utils import to_address
 
-from convex_contracts.convex_registry import ConvexRegistry
+from convex_api.registry import Registry
 
 
 class ConvexContract:
     def __init__(self, convex: ConvexAPI, name: str, version: str):
         self._convex = convex
-        self._registry = ConvexRegistry(convex)
+        self._registry = Registry(convex)
         self._name = name
         self._version = version
         self._source = None
