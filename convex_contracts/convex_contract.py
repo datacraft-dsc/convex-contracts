@@ -7,9 +7,8 @@ Convex Contract
 
 from convex_api.account import Account as ConvexAccount
 from convex_api.convex_api import ConvexAPI
-from convex_api.utils import to_address
-
 from convex_api.registry import Registry
+from convex_api.utils import to_address
 
 
 class ConvexContract:
