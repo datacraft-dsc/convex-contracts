@@ -41,23 +41,21 @@ def test_contract_not_registered(convex):
     assert(contract.owner_address is None)
     assert(contract.is_registered is False)
 
-def test_contract_register(convex, account_import):
-    account = account_import
+def test_contract_register(convex, contract_account):
     contract = TestContract(convex)
-    if contract.owner_address:
-        account.address = contract.owner_address
-    else:
-        account = convex.create_account(account_import)
-    convex.topup_account(account)
-    assert(contract.deploy(account))
-    assert(contract.register(account))
+    convex.topup_account(contract_account)
+    assert(contract.deploy(contract_account))
+    owner_address = contract._registry.resolve_owner(contract.name)
+    if owner_address and owner_address != contract_account.address:
+        contract_account.address = owner_address
+    assert(contract.register(contract_account))
 
     # test get deloy version
     assert(contract.deploy_version == contract.version)
 
     value = secrets.token_hex(32)
     # test send and query functions
-    assert(contract.send((f'(set "{value}")'), account))
+    assert(contract.send((f'(set "{value}")'), contract_account))
     result = contract.query('(get)')
     assert(result)
     assert(result['value'])

@@ -23,11 +23,12 @@ is_contract_deployed = False
 TEST_CONTRACT_NAME = 'starfish-test.did'
 
 @pytest.fixture
-def did_contract(convex, account_import):
+def did_contract(convex, contract_account):
     global is_contract_deployed
     contract = DIDRegistryContract(convex, TEST_CONTRACT_NAME)
-    deploy_contract(convex, contract, account_import, is_contract_deployed)
-    is_contract_deployed = True
+    if not is_contract_deployed:
+        deploy_contract(convex, contract, contract_account)
+        is_contract_deployed = True
     return contract
 
 

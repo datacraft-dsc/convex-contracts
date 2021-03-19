@@ -32,9 +32,13 @@ def accounts(config, convex):
     account_1 = config['accounts']['account1']
     account_import = ConvexAccount.import_from_file(account_1['keyfile'], account_1['password'])
     accounts = [
-        convex.create_account(account_import),
+        convex.setup_account(account_1['name'], account_import),
         convex.create_account(account_import),
     ]
     topup_accounts(convex, accounts)
     return accounts
 
+
+@pytest.fixture(scope='module')
+def contract_account(accounts):
+    return accounts[0]

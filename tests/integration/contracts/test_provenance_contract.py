@@ -27,11 +27,12 @@ TEST_CONTRACT_NAME = 'starfish-test.provenance'
 
 
 @pytest.fixture
-def provenance_contract(convex, account_import):
+def provenance_contract(convex, contract_account):
     global is_contract_deployed
     contract = ProvenanceContract(convex, TEST_CONTRACT_NAME)
-    deploy_contract(convex, contract, account_import, is_contract_deployed)
-    is_contract_deployed = True
+    if not is_contract_deployed:
+        deploy_contract(convex, contract, contract_account)
+        is_contract_deployed = True
     return contract
 
 

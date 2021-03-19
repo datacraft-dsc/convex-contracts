@@ -27,16 +27,12 @@ def topup_accounts(convex: ConvexAPI, account: Union[ConvexAccount, ConvexAccoun
     return convex.topup_account(account, min_balance)
 
 
-def deploy_contract(convex, contract, account_import, is_deployed):
-    if contract.address:
-        if not is_deployed:
-            contract_account = account_import.copy()
-            contract_account.address = contract.owner_address
-            topup_accounts(convex, contract_account)
-            assert(contract.deploy(contract_account))
-            assert(contract.register(contract_account))
-    else:
-        contract_account = convex.create_account(account_import)
-        topup_accounts(convex, contract_account)
-        assert(contract.deploy(contract_account))
-        assert(contract.register(contract_account))
+def deploy_contract(convex, contract, contract_account):
+    topup_accounts(convex, contract_account)
+    assert(contract.deploy(contract_account))
+    # fix when the registered contract was not registered by the named contract_account address
+    account = contract_account
+    owner_address = contract._registry.resolve_owner(contract.name)
+    if owner_address and owner_address != contract_account.address:
+        account = ConvexAccount.import_from_account(contract_account, owner_address)
+    assert(contract.register(account))
