@@ -128,11 +128,11 @@ def main():
             return
 
         if account_import.address is None:
-            contract_account = account_import
-            logger.debug(f'loading account with address: {contract_account.address}')
-        else:
             contract_account = convex.setup_account(args.name, account_import)
             logger.debug(f'setting up account address: {contract_account.address}')
+        else:
+            contract_account = account_import
+            logger.debug(f'loading account with address: {contract_account.address}')
 
         contract_items = load_contracts(CONTRACT_PACKAGE)
         values = {}
