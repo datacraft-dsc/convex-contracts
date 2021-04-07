@@ -3,6 +3,7 @@
 """
 
     Script to provide convex contract tools
+    Perfectionist
 
 """
 
@@ -147,7 +148,7 @@ def main():
             if contract.deploy(contract_account):
                 # may need to change the register address to the original address used before account naming was used.
                 account = contract_account
-                owner_address = contract._registry.resolve_owner(contract.name)
+                owner_address = contract.resolve_owner_address(contract.name)
                 if owner_address and owner_address != contract_account.address:
                     account = ConvexAccount.import_from_account(contract_account, owner_address)
 

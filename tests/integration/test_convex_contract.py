@@ -45,7 +45,7 @@ def test_contract_register(convex, contract_account):
     contract = TestContract(convex)
     convex.topup_account(contract_account)
     assert(contract.deploy(contract_account))
-    owner_address = contract._registry.resolve_owner(contract.name)
+    owner_address = contract.resolve_owner_address(contract.name)
     if owner_address and owner_address != contract_account.address:
         contract_account.address = owner_address
     assert(contract.register(contract_account))

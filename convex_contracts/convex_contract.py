@@ -60,6 +60,12 @@ class ConvexContract:
             raise ValueError(f'No contract address found for {self._name}')
         return self._convex.query(f'(call {self.address} {transaction})', account_address)
 
+    def resolve_address(self, name):
+        return self._registry.resolve_address(name)
+
+    def resolve_owner_address(self, name):
+        return self._registry.resolve_owner(name)
+
     @property
     def deploy_version(self):
         if self.address:
@@ -74,13 +80,13 @@ class ConvexContract:
     @property
     def address(self):
         if self._address is None:
-            self._address = self._registry.resolve_address(self._name)
+            self._address = self.resolve_address(self._name)
         return self._address
 
     @property
     def owner_address(self):
         if self._owner_address is None:
-            self._owner_address = self._registry.resolve_owner(self._name)
+            self._owner_address = self.resolve_owner_address(self._name)
         return self._owner_address
 
     @property
