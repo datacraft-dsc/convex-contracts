@@ -20,7 +20,7 @@ with open('CHANGELOG.md') as changelog_file:
 
 install_requirements = [
     'typing_extensions',
-    'convex_api_py >= 0.1.2',
+    'convex_api_py >= 0.1.3',
 ]
 
 setup_requirements = ['pytest-runner', ]
