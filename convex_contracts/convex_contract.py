@@ -51,14 +51,14 @@ class ConvexContract:
     def send(self, transaction, account):
         if not self.address:
             raise ValueError(f'No contract address found for {self._name}')
-        return self._convex.send(f'(call {self.address} {transaction})', account)
+        return self._convex.send(f'(call #{self.address} {transaction})', account)
 
     def query(self, transaction, account_address=None):
         if account_address is None:
             account_address = self.address
         if not self.address:
             raise ValueError(f'No contract address found for {self._name}')
-        return self._convex.query(f'(call {self.address} {transaction})', account_address)
+        return self._convex.query(f'(call #{self.address} {transaction})', account_address)
 
     def resolve_address(self, name):
         return self._registry.resolve_address(name)
