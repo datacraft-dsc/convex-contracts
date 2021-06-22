@@ -34,9 +34,9 @@ You need these names to use the contracts below.
 Using the convex api to get the contract address based on the contract name and owner address.
 
 ```python
-    >>> from convex_api import ConvexAPI
-    >>> convex_api = ConvexAPI('https://convex.world')
-    >>> convex_api.query('(call *registry* (cns-resolve "starfish-test.did"))', 9)
+    >>> from convex_api import API
+    >>> convex = API('https://convex.world')
+    >>> convex.query('(call *registry* (cns-resolve "starfish-test.did"))', 9)
     {'value': 1483}
 
 ```
@@ -46,16 +46,17 @@ Using the convex api to get the contract address based on the contract name and 
 Using the contract class, it will resolve the correct address.
 
 ```python
-    >>> from convex_api import ConvexAPI
+    >>> from convex_api import (API, Account, KeyPair)
     >>> from convex_contracts.contracts import DIDRegistryContract
 
-    >>> convex_api = ConvexAPI('https://convex.world')
-    >>> contract = DIDRegistryContract(convex_api)
+    >>> convex = API('https://convex.world')
+    >>> contract = DIDRegistryContract(convex)
     >>> contract.address
     1483
     >>> contract.owner_address
     1482
-    >>> account = convex_api.create_account()
+    >>> key_pair = KeyPair.import_from_file('my_key.pcm', 'secret')
+    >>> account = convex.create_account(key_pair)
     >>> convex_api.topup_account(account)
     >>> contract.send('(register 0xe5b56a945e6ea79debe04028fef0345297b02d3087d28ffac953c2bfc2c58aaa "test - ddo")', account)
     {'value': 'e5b56a945e6ea79debe04028fef0345297b02d3087d28ffac953c2bfc2c58aaa'}
