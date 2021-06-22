@@ -8,9 +8,10 @@ import pytest
 import secrets
 
 from convex_api import (
-    Account as ConvexAccount,
-    ConvexAPI
+    API,
+    Account
 )
+
 from convex_api.exceptions import ConvexAPIError
 from convex_api.utils import to_address
 

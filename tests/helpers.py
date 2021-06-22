@@ -11,13 +11,15 @@ from typing import (
 )
 
 
-from convex_api import Account as ConvexAccount
-from convex_api import ConvexAPI
+from convex_api import (
+    API,
+    Account
+)
 
-ConvexAccountList = List[ConvexAccount]
+AccountList = List[Account]
 
 
-def topup_accounts(convex: ConvexAPI, account: Union[ConvexAccount, ConvexAccountList], min_balance=None):
+def topup_accounts(convex: API, account: Union[Account, AccountList], min_balance=None):
     if isinstance(account, (list, tuple)):
         for account_item in account:
             topup_accounts(convex, account_item, min_balance)

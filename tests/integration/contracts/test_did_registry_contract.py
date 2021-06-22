@@ -8,8 +8,8 @@ import pytest
 import secrets
 
 from convex_api import (
-    Account as ConvexAccount,
-    ConvexAPI
+    Account,
+    API
 )
 from convex_api.exceptions import ConvexAPIError
 

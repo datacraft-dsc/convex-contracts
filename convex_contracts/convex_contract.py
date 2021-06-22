@@ -5,14 +5,16 @@ Convex Contract
 
 """
 
-from convex_api.account import Account as ConvexAccount
-from convex_api.convex_api import ConvexAPI
+from convex_api import (
+    API,
+    Account
+)
 from convex_api.registry import Registry
 from convex_api.utils import to_address
 
 
 class ConvexContract:
-    def __init__(self, convex: ConvexAPI, name: str, version: str):
+    def __init__(self, convex: API, name: str, version: str):
         self._convex = convex
         self._registry = Registry(convex)
         self._name = name
@@ -21,7 +23,7 @@ class ConvexContract:
         self._address = None
         self._owner_address = None
 
-    def deploy(self, account: ConvexAccount):
+    def deploy(self, account: Account):
         if not self._source:
             raise ValueError(f'Cannot deploy the contract {self.name} with no source text')
 
