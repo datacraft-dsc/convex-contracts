@@ -16,8 +16,11 @@ import os
 import re
 
 
-from convex_api import Account as ConvexAccount
-from convex_api import ConvexAPI
+from convex_api import (
+    Account,
+    API,
+    KeyPair
+)
 
 from convex_contracts.convex_contract import ConvexContract
 
@@ -111,7 +114,7 @@ def main():
         password = os.environ.get('PASSWORD', args.password)
         if keyword:
             keyword = re.sub('_', ' ', keyword)
-            account_import = ConvexAccount.import_from_mnemonic(keyword, address=args.address, name=args.name)
+            key_pair_import = KeyPair.import_from_mnemonic(keyword)
         else:
             if keyfile is None or password is None:
                 print('You need to provide an account keyfile and password to deploy the contracts')
@@ -119,21 +122,26 @@ def main():
             logger.debug(f'loading account keyfile {keyfile}')
             if not os.path.exists(keyfile):
                 print(f'Cannot find account keyfile {keyfile}')
-            account_import = ConvexAccount.import_from_file(keyfile, password, address=args.address, name=args.name)
+            key_pair_import = KeyPair.import_from_file(keyfile, password)
 
         url = os.environ.get('URL', args.url)
         logger.debug(f'connecting to convex network {url}')
-        convex = ConvexAPI(url)
+        convex = API(url)
         if not convex:
             print(f'Cannot connect to the convex network at {url}')
             return
 
-        if account_import.address is None:
-            contract_account = convex.setup_account(args.name, account_import)
+        if args.name and args.address is None:
+            contract_account = convex.setup_account(args.name, key_pair_import)
             logger.debug(f'setting up account address: {contract_account.address}')
-        else:
-            contract_account = account_import
+        elif args.address:
+            contract_account = Account(key_pair_import, args.address)
             logger.debug(f'loading account with address: {contract_account.address}')
+        else:
+            contract_account = convex.create_account(key_pair_import)
+            logger.debug(f'creating account with address: {contract_account.address}')
+            convex.topup_account(contract_account, TOPUP_AMOUNT)
+
 
         contract_items = load_contracts(CONTRACT_PACKAGE)
         values = {}
