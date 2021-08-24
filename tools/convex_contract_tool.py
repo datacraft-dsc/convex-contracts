@@ -17,8 +17,8 @@ import re
 
 
 from convex_api import (
-    Account,
     API,
+    Account,
     KeyPair
 )
 
@@ -142,7 +142,6 @@ def main():
             logger.debug(f'creating account with address: {contract_account.address}')
             convex.topup_account(contract_account, TOPUP_AMOUNT)
 
-
         contract_items = load_contracts(CONTRACT_PACKAGE)
         values = {}
         for class_name, contract_class in contract_items.items():
@@ -158,7 +157,7 @@ def main():
                 account = contract_account
                 owner_address = contract.resolve_owner_address(contract.name)
                 if owner_address and owner_address != contract_account.address:
-                    account = ConvexAccount.import_from_account(contract_account, owner_address)
+                    account = Account.import_from_account(contract_account, owner_address)
 
                 if contract.register(account):
                     values[contract.name] = contract.address
