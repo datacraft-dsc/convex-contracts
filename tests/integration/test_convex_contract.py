@@ -25,12 +25,25 @@ class TestContract(ConvexContract):
         ConvexContract.__init__(self, convex, name or TEST_CONTRACT_NAME, '0.0.1')
 
         self._source = f'''
-            (defn version [] "{self.version}")
-            (def stored-data nil)
-            (defn get [] stored-data)
-            (defn set [x] (def stored-data x))
-            (export get set version)
-
+            (defn version
+                ^{{:callable? true}}
+                []
+                "{self.version}"
+            )
+            (def stored-data
+                ^{{:private? true}}
+                nil
+            )
+            (defn get
+                ^{{:callable? true}}
+                []
+                stored-data
+            )
+            (defn set
+                ^{{:callable? true}}
+                [x]
+                (def stored-data x)
+            )
         '''
 
 def test_contract_not_registered(convex):
