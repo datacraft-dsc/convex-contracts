@@ -61,7 +61,7 @@ def test_contract_did_register_assert_did(convex, did_contract, accounts):
     command = f'(register 0x{did_valid} "{ddo}")'
     result = did_contract.send(command, account_test)
     assert(result['value'])
-    assert(result['value'] == f'0x{did_valid}')
+    assert(result['value'] == did_valid)
 
 
 def test_contract_did_register_resolve(convex, did_contract, accounts):
@@ -81,7 +81,7 @@ def test_contract_did_register_resolve(convex, did_contract, accounts):
     command = f'(register {did} "{ddo}")'
     result = did_contract.send(command, account_test)
     assert(result['value'])
-    assert(result['value'] == did)
+    assert(result['value'] == did_hex)
 
     # call resolve did to ddo
 
@@ -120,7 +120,7 @@ def test_contract_did_register_resolve(convex, did_contract, accounts):
     command = f'(register {did} "{new_ddo}")'
     result = did_contract.send(command, account_test)
     assert(result['value'])
-    assert(result['value'] == did)
+    assert(result['value'] == did_hex)
 
 
     # call register - update from other account
@@ -150,7 +150,7 @@ def test_contract_did_register_resolve(convex, did_contract, accounts):
     command = f'(unregister {did})'
     result = did_contract.send(command, account_test)
     assert(result['value'])
-    assert(result['value'] == did)
+    assert(result['value'] == did_hex)
 
     # call resolve did to empty
 
@@ -181,7 +181,7 @@ def test_contract_did_transfer(convex, did_contract, accounts):
     command = f'(register {did} "{ddo}")'
     result = did_contract.send(command, account_test)
     assert(result['value'])
-    assert(result['value'] == did)
+    assert(result['value'] == did_hex)
 
     # call owner? on owner account
     command = f'(owner? {did})'
@@ -197,7 +197,7 @@ def test_contract_did_transfer(convex, did_contract, accounts):
     command = f'(transfer {did} {account_other.address})'
     result = did_contract.send(command, account_test)
     assert(result['value'])
-    assert(result['value'][0] == did)
+    assert(result['value'][0] == did_hex)
 
     #check ownership to different accounts
 
@@ -223,7 +223,7 @@ def test_contract_did_transfer(convex, did_contract, accounts):
     command = f'(unregister {did})'
     result = did_contract.send(command, account_other)
     assert(result['value'])
-    assert(result['value'] == did)
+    assert(result['value'] == did_hex)
 
 
 def test_contract_did_bulk_register(convex, did_contract, accounts):
@@ -239,7 +239,7 @@ def test_contract_did_bulk_register(convex, did_contract, accounts):
         command = f'(register {did} "{ddo}")'
         result = did_contract.send(command, account_test)
         assert(result['value'])
-        assert(result['value'] == did)
+        assert(result['value'] == did_hex)
 
 
 def test_contract_did_owner_list(convex, did_contract, accounts):
@@ -252,14 +252,14 @@ def test_contract_did_owner_list(convex, did_contract, accounts):
         topup_accounts(convex, accounts)
         did_hex = secrets.token_hex(32)
         did = f'0x{did_hex}'
-        did_list.append(did)
+        did_list.append(did_hex)
 #        ddo = secrets.token_hex(51200)
         ddo = f'ddo test - {index}'
 
         command = f'(register {did} "{ddo}")'
         result = did_contract.send(command, account_test)
         assert(result['value'])
-        assert(result['value'] == did)
+        assert(result['value'] == did_hex)
 
 
     command = f'(owner-list {account_test.address})'
