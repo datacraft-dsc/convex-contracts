@@ -8,7 +8,7 @@ from convex_contracts.convex_contract import ConvexContract
 class ProvenanceContract(ConvexContract):
 
     def __init__(self, convex, name=None):
-        ConvexContract.__init__(self, convex, name or 'starfish.provenance', '0.0.1')
+        ConvexContract.__init__(self, convex, name or 'starfish.provenance', '0.0.2')
 
         self._source = f'''
             (def provenance-asset
@@ -36,9 +36,9 @@ class ProvenanceContract(ConvexContract):
             )
             (defn register
                 ^{{:callable? true}}
-                [asset-id]
+                [asset-id data]
                 (assert-asset-id asset-id)
-                (let [record {{:owner *caller* :timestamp *timestamp*}}]
+                (let [record {{:owner *caller* :timestamp *timestamp* :dta data}}]
                     (def provenance-asset
                         (assoc provenance-asset (blob asset-id)
                             (conj (get provenance-asset (blob asset-id))

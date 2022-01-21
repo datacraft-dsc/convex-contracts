@@ -4,7 +4,9 @@
     Test Convex Provenance Contract for starfish
 
 """
+import json
 import pytest
+import re
 import secrets
 
 from convex_api import (
@@ -42,6 +44,10 @@ def register_test_list(pytestconfig, convex, provenance_contract, accounts):
 
     account_test = accounts[0]
     account_other = accounts[1]
+    test_data = {
+        'name': secrets.token_hex(32),
+        'info': secrets.token_hex(32),
+    }
     if not test_event_list:
         test_event_list = []
         event_count = 10
@@ -56,7 +62,8 @@ def register_test_list(pytestconfig, convex, provenance_contract, accounts):
                     register_account = account_other
                 else:
                     register_account = account_test
-            result = provenance_contract.send(f'(register {asset_id})', register_account)
+            test_data_text = re.sub(r'\"', '//#', json.dumps(test_data))
+            result = provenance_contract.send(f'(register {asset_id} "{test_data_text}")', register_account)
             assert(result)
             record = result['value']
             assert(record['owner'] == register_account.address)
@@ -105,5 +112,5 @@ def test_bad_asset_id(convex, provenance_contract, accounts):
     topup_accounts(convex, account_test)
     bad_asset_id = '0x' + secrets.token_hex(20)
     with pytest.raises(ConvexAPIError, match='INVALID'):
-        result = provenance_contract.send(f'(register {bad_asset_id})', account_test)
+        result = provenance_contract.send(f'(register {bad_asset_id} "test data")', account_test)
 
