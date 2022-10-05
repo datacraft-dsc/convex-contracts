@@ -90,6 +90,7 @@ def test_provenance_contract_event_list(convex, provenance_contract, accounts, r
     event_item = event_list[0]
     assert(event_item['owner'] == record['owner'])
     assert(event_item['timestamp'])
+    assert(event_item['data'])
 
 
 def test_provenance_contract_event_owner_list(convex, provenance_contract, accounts, register_test_list):
