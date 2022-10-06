@@ -9,7 +9,7 @@ IGNORE_VENV ?= FALSE
 
 PACKAGE_FOLDERS = convex_contracts tools
 
-FLAKE8_PARAMETERS = --max-line-length=132 --statistics $(PACKAGE_FOLDERS)
+FLAKE8_PARAMETERS = --ignore=E501 --max-line-length=132 --statistics $(PACKAGE_FOLDERS)
 
 ISORT_PARAMETERS = --use-parentheses  --ignore-whitespace --check-only --multi-line=3 --force-grid-wrap=2 --line-width=132 --diff $(PACKAGE_FOLDERS)
 
