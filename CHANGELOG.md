@@ -1,5 +1,7 @@
 ## Change Log
 
+### Release v0.0.4
++   New provenance contract which stores provenance records using full asset did.
 
 ### Release v0.0.3
 +   Upgrade to new convex_api_py 0.2.0
