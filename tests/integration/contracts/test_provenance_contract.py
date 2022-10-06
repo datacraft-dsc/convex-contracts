@@ -99,7 +99,7 @@ def test_provenance_contract_event_list(convex, provenance_contract, accounts, r
     record = register_test_list[secrets.randbelow(len(register_test_list))]
     asset_did = record['asset_did']
     did = decode_asset_did(asset_did)
-    result = provenance_contract.query(f'(get-provenance {did["id"]} {did["asset_id"]})', account_test)
+    result = provenance_contract.query(f'(get-data {did["id"]} {did["asset_id"]})', account_test)
     assert(result)
     event_item = result['value']
     assert(event_item['owner'] == record['owner'])

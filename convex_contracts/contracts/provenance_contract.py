@@ -53,7 +53,7 @@ class ProvenanceContract(ConvexContract):
                     record
                 )
             )
-            (defn get-provenance
+            (defn get-data
                 ^{{:callable? true}}
                 [did-id asset-id]
                 (assert-blob-id did-id)
