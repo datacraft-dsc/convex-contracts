@@ -22,11 +22,23 @@ from tests.helpers import (
     deploy_contract
 )
 
-
 test_event_list = None
 is_contract_deployed = False
 TEST_CONTRACT_NAME = 'starfish-test.provenance'
 
+
+def decode_asset_did(did):
+    match = re.match('^did:([a-z0-9]+):([a-f0-9]{64})/([a-f0-9]{64})', did, re.IGNORECASE)
+    return {
+        'method': match.group(1),
+        'id': f'0x{match.group(2)}',
+        'asset_id': f'0x{match.group(3)}',
+    }
+
+def generate_asset_did():
+    did_id = secrets.token_hex(32)
+    asset_id = secrets.token_hex(32)
+    return f'did:dep:{did_id}/{asset_id}'
 
 @pytest.fixture
 def provenance_contract(convex, contract_account):
@@ -55,19 +67,23 @@ def register_test_list(pytestconfig, convex, provenance_contract, accounts):
 
         register_account = account_other
         for index in range(0, event_count):
+            asset_did = generate_asset_did()
+            did = decode_asset_did(asset_did)
+
             if index % 2 == 0:
-                asset_id_hex = secrets.token_hex(32)
-                asset_id = f'0x{asset_id_hex}'
                 if register_account.address == account_test.address:
                     register_account = account_other
                 else:
                     register_account = account_test
+
             test_data_text = re.sub(r'\"', '//#', json.dumps(test_data))
-            result = provenance_contract.send(f'(register {asset_id} "{test_data_text}")', register_account)
+            register_line = f'(register {did["id"]} {did["asset_id"]} "{test_data_text}")'
+            print(register_line)
+            result = provenance_contract.send(register_line, register_account)
             assert(result)
             record = result['value']
             assert(record['owner'] == register_account.address)
-            record['asset_id'] = asset_id
+            record['asset_did'] = asset_did
             test_event_list.append(record)
     return test_event_list
 
@@ -81,13 +97,11 @@ def test_provenance_contract_event_list(convex, provenance_contract, accounts, r
     topup_accounts(convex, account_test)
 
     record = register_test_list[secrets.randbelow(len(register_test_list))]
-    asset_id = record['asset_id']
-    result = provenance_contract.query(f'(event-list {asset_id})', account_test)
+    asset_did = record['asset_did']
+    did = decode_asset_did(asset_did)
+    result = provenance_contract.query(f'(get-provenance {did["id"]} {did["asset_id"]})', account_test)
     assert(result)
-    event_list = result['value']
-    assert(event_list)
-    assert(len(event_list) == 2)
-    event_item = event_list[0]
+    event_item = result['value']
     assert(event_item['owner'] == record['owner'])
     assert(event_item['timestamp'])
     assert(event_item['data'])
@@ -104,8 +118,10 @@ def test_provenance_contract_event_owner_list(convex, provenance_contract, accou
     owner_address = to_address(record['owner'])
     result = provenance_contract.query(f'(owner-list {owner_address})', account_other)
     asset_list = result['value']
+    print(asset_list)
     assert(asset_list)
     assert(len(asset_list) >= owner_count)
+
 
 
 def test_bad_asset_id(convex, provenance_contract, accounts):
@@ -113,5 +129,6 @@ def test_bad_asset_id(convex, provenance_contract, accounts):
     topup_accounts(convex, account_test)
     bad_asset_id = '0x' + secrets.token_hex(20)
     with pytest.raises(ConvexAPIError, match='INVALID'):
-        result = provenance_contract.send(f'(register {bad_asset_id} "test data")', account_test)
+        result = provenance_contract.send(f'(register {bad_asset_id} {bad_asset_id} "test data")', account_test)
+
 

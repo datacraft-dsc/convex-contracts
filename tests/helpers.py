@@ -38,3 +38,4 @@ def deploy_contract(convex, contract, contract_account):
     if owner_address and owner_address != contract_account.address:
         account = ConvexAccount.import_from_account(contract_account, owner_address)
     assert(contract.register(account))
+

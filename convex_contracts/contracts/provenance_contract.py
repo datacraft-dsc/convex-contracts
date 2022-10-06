@@ -8,10 +8,10 @@ from convex_contracts.convex_contract import ConvexContract
 class ProvenanceContract(ConvexContract):
 
     def __init__(self, convex, name=None):
-        ConvexContract.__init__(self, convex, name or 'starfish.provenance', '0.0.3')
+        ConvexContract.__init__(self, convex, name or 'starfish.provenance', '0.0.4')
 
         self._source = f'''
-            (def provenance-asset
+            (def provenance-data
                 ^{{:private? true}}
                 {{}}
             )
@@ -24,46 +24,47 @@ class ProvenanceContract(ConvexContract):
                 []
                 "{self.version}"
             )
-            (defn assert-asset-id
+            (defn assert-blob-id
                 ^{{:callable? false}}
                 [value]
-                (when-not (and (blob? value) (== 32 (count (blob value)))) (fail "INVALID" "invalid asset-id"))
+                (when-not (and (blob? value) (== 32 (count (blob value)))) (fail "INVALID" "invalid asset or did id"))
             )
             (defn assert-address
                 ^{{:callable? false}}
                 [value]
                 (when-not (address? (address value)) (fail "INVALID" "invalid address"))
             )
+
             (defn register
                 ^{{:callable? true}}
-                [asset-id data]
-                (assert-asset-id asset-id)
-                (let [record {{:owner *caller* :timestamp *timestamp* :data data}}]
-                    (def provenance-asset
-                        (assoc provenance-asset (blob asset-id)
-                            (conj (get provenance-asset (blob asset-id))
-                            record)
-                        )
+                [did-id asset-id data]
+                (assert-blob-id did-id)
+                (assert-blob-id asset-id)
+                (let [record {{:owner *caller* :timestamp *timestamp* :data data}} owner-record {{:did-id did-id :asset-id asset-id}}]
+                    (def provenance-data
+                        (assoc-in provenance-data [(blob did-id) (blob asset-id)] record)
                     )
                     (def provenance-owner
                         (assoc provenance-owner *caller*
                             (conj (get provenance-owner *caller*)
-                            (blob asset-id))
+                            owner-record)
                         )
                     )
                     record
                 )
             )
-            (defn event-list
+            (defn get-provenance
                 ^{{:callable? true}}
-                [asset-id]
-                (assert-asset-id asset-id)
-                (get provenance-asset (blob asset-id))
+                [did-id asset-id]
+                (assert-blob-id did-id)
+                (assert-blob-id asset-id)
+                (get-in provenance-data [(blob did-id) (blob asset-id)])
             )
-            (defn asset-list
+            (defn did-id-list
                 ^{{:callable? true}}
-                []
-                (keys provenance-asset)
+                [did-id]
+                (assert-blob-id did-id)
+                (get-in provenance-data [(blob did-id)])
             )
             (defn owner-list
                 ^{{:callable? true}}
