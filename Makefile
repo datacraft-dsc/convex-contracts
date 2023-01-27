@@ -26,6 +26,7 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 install: virtualvenv
+	python -m pip install --upgrade pip
 	pip install -e ".[dev]" -e ".[test]" -e ".[docs]"
 
 install-dev: virtualvenv
@@ -68,5 +69,3 @@ docs:
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	$(MAKE) -C docs man
-
-
