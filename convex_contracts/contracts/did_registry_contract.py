@@ -116,7 +116,7 @@ class DIDRegistryContract(ConvexContract):
                 ^{{:callable? true}}
                 [the-owner]
                 (assert-address the-owner)
-                (mapcat (fn [v] (when (= (address the-owner) (get (last v) :owner)) [(first v)])) registry)
+                (filter (fn [x] (= (get (last x) :owner) (address the-owner))) registry)
             )
 
         '''
